@@ -1,0 +1,68 @@
+{% load crispy_forms_tags %}
+<h1>Search</h1>
+{% if user.is_authenticated %}
+<p>
+<button onclick="showInput()">Enter url</button>
+<div id="input-container" style="display: none;">
+    <form method="post" id="message-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+    <input type="text" id="input-url" name='url' placeholder="Type URL here" pattern="https?://.+">
+    <button onclick="hideInput()" type="submit">Go</button>
+    </form>
+</div>
+{% if search_list %}
+<ul>
+  {% if user.is_superuser %}
+  {% for search in search_list %}
+    <li>
+        <a href="{% url 'search:search_detail'  search.id %}">{{ search.url }}</a>
+        <br/>
+        <small>
+        {% if search.owner.username %}
+            posted by {{ search.owner.username }}
+        {% endif %}
+        {{ search.created_at }}
+        </small>
+    </li>
+  {% endfor %}
+  {% else %}
+    {% for search in search_list_private %}
+    <li>
+        <a href="{% url 'search:search_detail'  search.id %}">{{ search.url }}</a>
+        <br/>
+        <small>
+        {% if search.owner.username %}
+            posted by {{ search.owner.username }}
+        {% endif %}
+        {{ search.created_at }}
+        </small>
+    </li>
+    {% endfor %}
+  {% endif %}
+</ul>
+{% else %}
+  <p>There are no searches in the database.</p>
+{% endif %}
+</p>
+{% else %}
+<p>Please log in to use this tool</p>
+{% endif %}
+<p>
+  {% if user.is_authenticated %}
+  <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+  {% else %}
+  <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+  {% endif %}
+</p>
+
+<script>
+    function showInput() {
+      document.getElementById("input-container").style.display = "block";
+    }
+    function hideInput() {
+      var inputValue = document.getElementById("input-box").value;
+      // Do something with the input value
+      document.getElementById("input-container").style.display = "none";
+    }
+</script>
