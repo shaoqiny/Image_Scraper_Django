@@ -40,7 +40,7 @@ class SearchListView(ListView):
             # Return full search list to superuser, return private search list to user
             # This is ugly, it should be optimized
             search_list = Search.objects.all().order_by('-created_at')
-            search_list_private = Search.objects.filter(owner=request.user)
+            search_list_private = Search.objects.filter(owner=request.user).order_by('-created_at')
 
             ctx = {'search_list' : search_list, 'search_list_private': search_list_private}
             return render(request, self.template_name, ctx)

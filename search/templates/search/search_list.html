@@ -20,8 +20,9 @@
         <br/>
         <small>
         {% if search.owner.username %}
-            posted by {{ search.owner.username }}
+            searched by {{ search.owner.username }}
         {% endif %}
+        on
         {{ search.created_at }}
         </small>
     </li>
@@ -33,8 +34,9 @@
         <br/>
         <small>
         {% if search.owner.username %}
-            posted by {{ search.owner.username }}
+            searched by {{ search.owner.username }}
         {% endif %}
+        on
         {{ search.created_at }}
         </small>
     </li>
